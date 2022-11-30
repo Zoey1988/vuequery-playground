@@ -3,8 +3,8 @@
     <div v-if="isLoading">Getting repo...</div>
     <div v-else-if="isError">Sorry, try later...</div>
     <div v-else-if="user">
-      <h1 class="mb-4">{{ user.id }}</h1>
-      <p>{{ user.login }}</p>
+      <h1 class="mb-4">user id: {{ user.id }}</h1>
+      <p>username: {{ user.login }}</p>
     </div>
   </div>
 </template>

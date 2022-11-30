@@ -1,56 +1,41 @@
 <template>
   <div class="container mx-auto p-6">
-    <select
-      name="perPage"
-      class="p-2 border rounded mb-4"
-      @change="changePerPage"
-    >
-      <option value="5">5</option>
-      <option value="10">10</option>
-      <option value="20">20</option>
-      <option value="30">30</option>
-    </select>
-    <h1 class="mb-4">All repositories</h1>
+    <label>
+      Per page:
+      <select
+        name="perPage"
+        class="p-2 border rounded mb-4"
+        @change="changePerPage"
+      >
+        <option
+          v-for="page in perPageOptions"
+          :value="page"
+          :selected="page === perPage"
+        >
+          {{ page }}
+        </option>
+      </select>
+    </label>
+    <h1 class="mb-4 text-2xl">All Repositories</h1>
     <div v-if="isLoading">Searching...</div>
     <div v-else-if="isError">Sorry, try later...</div>
     <div v-else-if="!allRepos.length">There is no repo for your search</div>
     <div v-else class="flex flex-wrap">
-      <div
-        v-for="repo in allRepos"
-        class="border p-4 mr-2 mb-3 basis-1/3 grow rounded"
-      >
-        <router-link
-          :to="{
-            name: 'users-user-repo',
-            params: { user: repo.owner.login, repo: repo.name },
-          }"
-          class="font-bold"
-        >
-          {{ repo.name }}
-        </router-link>
-
-        <p class="mb-4">
-          {{ repo.description }}
-        </p>
-
-        <router-link
-          :to="{ name: 'users-user', params: { user: repo.owner.login } }"
-          class="text-orange-400"
-        >
-          {{ repo.owner.login }}
-        </router-link>
-      </div>
+      <card v-for="repo in allRepos" :repo="repo" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { RouterLink } from "vue-router";
+
+import Card from "../components/Card.vue";
 
 import { api } from "../helpers/api";
 
 import { Repo } from "../types";
+
+const perPageOptions = ["5", "10", "15", "20"];
 
 const perPage = ref("10");
 
