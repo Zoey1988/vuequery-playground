@@ -24,6 +24,14 @@
 </template>
 
 <script setup lang="ts">
+// TODO-4 Use useQuery for getting a single repo
+
+// TODO-5 use useMutation for changing name of the repo
+// https://tanstack.com/query/v4/docs/guides/mutations
+
+// TODO-6 invalidate your query, as you updated your data.
+// https://tanstack.com/query/v4/docs/guides/query-invalidation
+
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 

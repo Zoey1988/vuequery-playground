@@ -27,6 +27,12 @@
 </template>
 
 <script setup lang="ts">
+// TODO-2 Use useQuery for getting all repos
+// https://tanstack.com/query/v4/docs/guides/queries
+
+// TODO-3 in request params, use perPage.value for per_page
+// now, you need to change your useQuery
+
 import { ref, watch } from "vue";
 
 import Card from "../components/Card.vue";
@@ -46,12 +52,13 @@ const isError = ref(false);
 function changePerPage(e: Event) {
   perPage.value = (e.target as HTMLSelectElement).value;
 }
+
 function searchRepos() {
   isLoading.value = true;
   api
     .get<Repo[]>("/user/repos", {
       params: {
-        per_page: perPage.value,
+        per_page: "10",
         visiblility: "private",
         type: "owner",
       },
