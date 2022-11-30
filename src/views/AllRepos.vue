@@ -5,6 +5,7 @@
       class="p-2 border rounded mb-4"
       @change="changePerPage"
     >
+      <option value="5">5</option>
       <option value="10">10</option>
       <option value="20">20</option>
       <option value="30">30</option>
@@ -60,18 +61,18 @@ const isError = ref(false);
 function changePerPage(e: Event) {
   perPage.value = (e.target as HTMLSelectElement).value;
 }
-
 function searchRepos() {
   isLoading.value = true;
   api
-    .get<{ items: Repo[] }>("/search/repositories", {
+    .get<Repo[]>("/user/repos", {
       params: {
-        q: "yektanet",
         per_page: perPage.value,
+        visiblility: "private",
+        type: "owner",
       },
     })
     .then(({ data }) => {
-      allRepos.value = data.items;
+      allRepos.value = data;
       isError.value = false;
     })
     .catch((err) => {
