@@ -10,8 +10,10 @@ export const api = axios.create({
 // To get your access token, follow this instruction
 // https://docs.github.com/en/enterprise-cloud@latest/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token#creating-a-personal-access-token-classic
 
+// NOTE: for scope of your access token, you only need «repo» for this project
+
 // If you are fartoot and lazy like Iman or you couldn't get access token for any reason, use mine with cautious
 
-const ACCESS_TOKEN = "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";
+const ACCESS_TOKEN = "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";
 
 api.defaults.headers.common["Authorization"] = `Bearer ${ACCESS_TOKEN}`;
