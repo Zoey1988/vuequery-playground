@@ -1,12 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
-import AllRepos from "./views/AllRepos.vue";
-import User from "./views/User.vue";
-import Repo from "./views/Repo.vue";
+import AllPosts from "./views/AllPosts.vue";
+import Post from "./views/Post.vue";
 
 const routes = [
-  { path: "/", component: AllRepos },
-  { path: "/users/:user/", name: "users-user", component: User },
-  { path: "/users/:user/:repo", name: "users-user-repo", component: Repo },
+  { path: "/", component: AllPosts },
+  { path: "/posts/:id/", name: "posts-id", component: Post },
 ];
 
 const router = createRouter({
