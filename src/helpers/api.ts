@@ -14,6 +14,6 @@ export const api = axios.create({
 
 // If you are fartoot and lazy like Iman or you couldn't get access token for any reason, use mine with cautious
 
-const ACCESS_TOKEN = "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";
+const ACCESS_TOKEN = "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";
 
 api.defaults.headers.common["Authorization"] = `Bearer ${ACCESS_TOKEN}`;
