@@ -34,6 +34,7 @@
 
 import { ref } from "vue";
 import { useRoute } from "vue-router";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/vue-query";
 
 import { api } from "../helpers/api";
 
@@ -42,45 +43,45 @@ import { Repo } from "../types";
 const newName = ref();
 
 const route = useRoute();
-
-const repo = ref<Repo>();
-const isLoading = ref(false);
-const isError = ref(false);
+const {
+  data: repo,
+  isLoading,
+  isError,
+} = useQuery({
+  queryKey: ["singleRepo", route.params.user, route.params.repo],
+  queryFn: getRepo,
+  staleTime: Infinity,
+  onSuccess: (data) => {
+    newName.value = data.name;
+  },
+});
 
 function getRepo() {
-  isLoading.value = true;
-  api
+  return api
     .get<Repo>(`/repos/${route.params.user}/${route.params.repo}`)
-    .then(({ data }) => {
-      repo.value = data;
-      isError.value = false;
-      newName.value = data.name;
-    })
-    .catch((err) => {
-      console.error(err);
-      isError.value = true;
-    })
-    .finally(() => {
-      isLoading.value = false;
-    });
+    .then(({ data }) => data);
 }
-getRepo();
+const queryClient = useQueryClient();
 
-// api guide: https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#get-a-repository
-
-function changeName() {
-  api({
-    method: "patch",
-    url: `/repos/${route.params.user}/${route.params.repo}`,
-    data: {
-      name: newName.value,
-    },
-  })
-    .then(({ data }) => {
-      repo.value = data;
-    })
-    .catch((err) => {
-      console.error(err);
+const mutation = useMutation({
+  mutationFn: (name) => {
+    return api({
+      method: "patch",
+      url: `/repos/${route.params.user}/${route.params.repo}`,
+      data: {
+        name,
+      },
     });
+  },
+  onSuccess: () => {
+    queryClient.invalidateQueries([
+      "singleRepo",
+      route.params.user,
+      route.params.repo,
+    ]);
+  },
+});
+function changeName() {
+  mutation.mutate(newName.value);
 }
 </script>
